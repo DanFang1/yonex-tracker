@@ -4,8 +4,7 @@ import re
 from flask import Flask, jsonify, session, request
 from flask_cors import CORS
 from auth import login_user, register_user
-from database import insert_user_products
-from database import get_connection
+from database import insert_user_products, get_connection, get_price_graph_data
 import scraper as scraper
 
 
@@ -191,9 +190,6 @@ def dashboard():
 
 @app.route('/price_graph', methods=['GET'])
 def price_graph():
-    from database import get_connection
-    from flask import jsonify
-    
     product_id = request.args.get('product_id')
     
     if not product_id:
@@ -203,31 +199,9 @@ def price_graph():
         product_id = int(product_id)
     except ValueError:
         return jsonify({"error": "Invalid product ID"}), 400
-    
-    conn = get_connection()
-    cursor = conn.cursor()
-    
-    cursor.execute("""
-        SELECT time_change AS t, recorded_price AS price
-        FROM price_history
-        WHERE history_pid = %s
-        UNION ALL
-        SELECT NOW() AS t, current_price AS price
-        FROM products
-        WHERE product_id = %s
-        ORDER BY t ASC
-    """, (product_id, product_id))
-    
-    data = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    
-    # Convert to list of dicts for JSON
-    points = [
-        {"date": row[0].isoformat(), "price": float(row[1])}
-        for row in data
-    ]
-    
+
+    points = get_price_graph_data(product_id)
+
     return jsonify({"data": points})
 
 

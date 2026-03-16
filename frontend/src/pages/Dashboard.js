@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getDashboard, deleteProduct, addProduct, getPriceGraph} from '../api/products';
+import PriceGraph from '../components/PriceGraph';
 import './Dashboard.css';
 
 
@@ -11,13 +12,12 @@ export default function Dashboard() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [productUrl, setProductUrl] = useState('');
   const [targetPrice, setTargetPrice] = useState('');
+  const [showGraph, setShowGraph] = useState(false);
+  const [graphData, setGraphData] = useState(null);
+  const [graphProductName, setGraphProductName] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const response = await getDashboard();
       setProducts(Array.isArray(response.data.products) ? response.data.products : []);
@@ -29,7 +29,11 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
@@ -55,12 +59,21 @@ export default function Dashboard() {
     }
   };
 
-  const handleViewGraph = async (productId) => {
+  const handleViewGraph = async (productId, productName) => {
     try {
-      await getPriceGraph(productId);
+      const response = await getPriceGraph(productId);
+      setGraphData(response.data.data);
+      setGraphProductName(productName);
+      setShowGraph(true);
     } catch (err) {
       alert('Failed to view graph');
     }
+  };
+
+  const handleCloseGraph = () => {
+    setShowGraph(false);
+    setGraphData(null);
+    setGraphProductName('');
   };
     
   if (loading) return <div className="dashboard">Loading...</div>;
@@ -103,7 +116,7 @@ export default function Dashboard() {
             <p>Target Price: <strong>${product[3]}</strong></p>
             <button 
               className="delete-btn"
-              onClick={() => handleViewGraph(product[0])}
+              onClick={() => handleViewGraph(product[0], product[1])}
             >
               Graph
             </button>
@@ -131,6 +144,13 @@ export default function Dashboard() {
 
       <button id="logout-button" onClick={() => navigate('/login')}>Logout</button>
 
+      {showGraph && (
+        <PriceGraph 
+          data={graphData} 
+          productName={graphProductName}
+          onClose={handleCloseGraph}
+        />
+      )}
     </div>
   );
 }

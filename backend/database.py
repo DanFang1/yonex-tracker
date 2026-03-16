@@ -92,6 +92,30 @@ def insert_user_products(user_id, product_url, target_price):
                 return None
 
 
+def get_price_graph_data(product_id):
+    """Return time-series points for a product's historical and current price."""
+    query = """
+        SELECT time_change AS t, recorded_price AS price
+        FROM price_history
+        WHERE history_pid = %s
+        UNION ALL
+        SELECT NOW() AS t, current_price AS price
+        FROM products
+        WHERE product_id = %s
+        ORDER BY t ASC
+    """
+
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, (product_id, product_id))
+            rows = cur.fetchall()
+
+    return [
+        {"date": row[0].isoformat(), "price": float(row[1])}
+        for row in rows
+    ]
+
+
 def check_connection() -> bool:
     "Checks if database connection is successful"
     try:
