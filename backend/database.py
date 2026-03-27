@@ -33,45 +33,54 @@ def insert_user_products(user_id, product_url, target_price):
                 # Fetch product data
                 product = scraper.return_dict(product_url)
                 
-                # Insert product if new; if it already exists, reuse existing product_id.
-                # Keep current_price fresh on existing rows.
+                # Insert product if URL and name are both new; otherwise reuse existing row.
                 insert_product_query = sql.SQL(
                     """
                     INSERT INTO products (product_url, product_name, current_price)
                     VALUES (%s, %s, %s)
-                    ON CONFLICT (product_url)
-                    DO NOTHING
+                    ON CONFLICT DO NOTHING
                     RETURNING product_id;
                     """
                 )
                 cur.execute(insert_product_query, (product["product_url"], product["product_name"], product["product_price"]))
-                inserted_row = cur.fetchone()
-
-                if inserted_row:
-                    product_id = inserted_row[0]
-                    is_new_product = True
-                else:
+                row = cur.fetchone()
+                if row is None:
+                    # Product already exists — look up its id to still link the user.
+                    cur.execute(
+                        "SELECT product_id FROM products WHERE product_url = %s OR product_name = %s",
+                        (product["product_url"], product["product_name"])
+                    )
+                    existing = cur.fetchone()
+                    if existing is None:
+                        print("Could not find existing product. Skipping.")
+                        return None
+                    product_id = existing[0]
                     is_new_product = False
-                    cur.execute("SELECT product_id FROM products WHERE product_url = %s", (product["product_url"],))
-                    product_id = cur.fetchone()[0]
-                    cur.execute("UPDATE products SET current_price = %s WHERE product_id = %s", (product["product_price"], product_id))
-                conn.commit()
-                print(f"Product ensured with ID: {product_id}")
-                
-                # Insert into usertrackeditems (ON CONFLICT handles duplicate user-product pairs)
+                    print(f"Product already exists with ID: {product_id}")
+                else:
+                    product_id = row[0]
+                    is_new_product = True
+                    conn.commit()
+                    print(f"Product inserted with ID: {product_id}")
+
+                # Link product to user; if already tracked by this user, do nothing.
                 user_tracking_query = sql.SQL(
                     """
                     INSERT INTO usertrackeditems (usersitemid, userprofileid, target_price)
                     VALUES (%s, %s, %s)
-                    ON CONFLICT (usersitemid, userprofileid) 
-                    DO UPDATE SET target_price = EXCLUDED.target_price
+                    ON CONFLICT (usersitemid, userprofileid)
+                    DO NOTHING
                     RETURNING usersitemid;
                     """
                 )
                 cur.execute(user_tracking_query, (product_id, user_id, target_price))
-                user_item_id = cur.fetchone()[0]
+                user_row = cur.fetchone()
+                if user_row is None:
+                    print(f"Item has already been added for user {user_id}.")
+                    return None
+                user_item_id = user_row[0]
                 conn.commit()
-                print(f"User item upserted for user {user_id}")
+                print(f"User item added for user {user_id}")
 
                 # Insert initial price snapshot only when this product is first created.
                 if is_new_product:
@@ -83,7 +92,7 @@ def insert_user_products(user_id, product_url, target_price):
                     )
                     cur.execute(price_history_query, (product_id, product["product_price"]))
                     conn.commit()
-                
+
                 return user_item_id
                 
             except IntegrityError as e:

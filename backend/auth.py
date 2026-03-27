@@ -57,12 +57,12 @@ def login_user(username: str, password: str) -> bool:
             row = cur.fetchone()
     
     if not row:
-        raise ValueError("Username not found.")
+        raise ValueError("User credential incorrect.")
     
     user_id, hashed_password = row
 
     if not verify_password(password, hashed_password):
-        raise ValueError("Password is incorrect.")
+        raise ValueError("User credential incorrect.")
 
     return user_id
     

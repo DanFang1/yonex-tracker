@@ -47,7 +47,7 @@ export default function Login() {
           />
             {error && (
               <p className="error">
-                {typeof error === 'string' ? error : error.message || JSON.stringify(error)}
+                {typeof error === 'string' ? error : error.error || error.message || 'Login failed. Try again.'}
               </p>
             )}
           <button type="submit" disabled={loading}>
