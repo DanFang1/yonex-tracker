@@ -120,7 +120,7 @@ def get_price_graph_data(product_id):
             rows = cur.fetchall()
 
     return [
-        {"date": row[0].isoformat(), "price": float(row[1])}
+        {"date": row[0].strftime("%m/%d/%Y"), "price": float(row[1])}
         for row in rows
     ]
 
