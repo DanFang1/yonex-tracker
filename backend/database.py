@@ -14,13 +14,7 @@ DB_PORT = os.getenv('DB_PORT')
 
 
 def get_connection():
-    return psycopg2.connect(
-        dbname=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        host=DB_HOST,
-        port=DB_PORT,
-    )
+    return psycopg2.connect(os.getenv('DATABASE_URL'))
 
 
 def insert_user_products(user_id, product_url, target_price):
@@ -137,4 +131,3 @@ def check_connection() -> bool:
         print(f"Database connection failed: {e}")
         return False
                 
-print(check_connection())
