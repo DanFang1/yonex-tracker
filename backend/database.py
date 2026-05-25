@@ -6,18 +6,12 @@ import scraper as scraper
 
 load_dotenv()
 
-DB_NAME = os.getenv('DB_NAME')
-DB_USER = os.getenv('DB_USER')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-DB_HOST = os.getenv('DB_HOST')
-DB_PORT = os.getenv('DB_PORT')
-
 
 def get_connection():
     return psycopg2.connect(os.getenv('DATABASE_URL'))
 
 
-def insert_user_products(user_id, product_url, target_price):
+def insert_user_products(user_id, product_url , target_price):
     """""Inserts a new product into the products table based on product URL, then links to user.
     Uses INSERT...ON CONFLICT to safely handle multiple concurrent processes."""
     

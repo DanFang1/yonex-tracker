@@ -3,14 +3,32 @@ import os
 import re
 from flask import Flask, jsonify, session, request
 from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from auth import login_user, register_user
 from database import insert_user_products, get_connection, get_price_graph_data
 import scraper as scraper
 
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_KEY")
-CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}}, supports_credentials=True,)
+_secret_key = os.getenv("FLASK_KEY")
+
+if not _secret_key:
+    raise RuntimeError("FLASK_KEY environment variable is not set")
+
+app.secret_key = _secret_key
+_frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+CORS(app, resources={r"/*": {"origins": [_frontend_url]}}, supports_credentials=True)
+ 
+
+_redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    storage_uri=_redis_url,
+    default_limits=["200 per day", "50 per hour"],
+)
+
 
 def is_valid_email(email):
     """Validate email format"""
@@ -18,13 +36,21 @@ def is_valid_email(email):
     return re.match(pattern, email) is not None
 
 
+ALLOWED_DOMAINS = {'www.yonex.com', 'yonex.com'}
+
+
 def is_valid_url(url):
-    """Validate URL format"""
-    pattern = r'^https?://.+'
-    return re.match(pattern, url) is not None
+    """Validate URL format and restrict to allowed domains to prevent SSRF."""
+    try:
+        from urllib.parse import urlparse
+        parsed = urlparse(url)
+        return parsed.scheme in ('http', 'https') and parsed.hostname in ALLOWED_DOMAINS
+    except Exception:
+        return False
 
 
 @app.route('/register', methods=['POST'])
+@limiter.limit("5 per minute")
 def register():
     # Validate required fields
     if 'username' not in request.form or not request.form['username'].strip():
@@ -59,6 +85,7 @@ def register():
 
 
 @app.route('/login', methods=['POST'])
+@limiter.limit("10 per minute")
 def login():
     # Validate required fields
     if 'username' not in request.form or not request.form['username'].strip():
@@ -78,6 +105,7 @@ def login():
 
 
 @app.route('/add_product', methods=['POST'])
+@limiter.limit("10 per minute")
 def add_product():
     query1 = """
     UPDATE usertrackeditems SET notified = FALSE WHERE usersitemid = %s;
@@ -190,20 +218,28 @@ def dashboard():
 
 @app.route('/price_graph', methods=['GET'])
 def price_graph():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({"error": "Not logged in"}), 401
+
     product_id = request.args.get('product_id')
-    
+
     if not product_id:
         return jsonify({"error": "Product ID is required"}), 400
-    
+
     try:
         product_id = int(product_id)
     except ValueError:
         return jsonify({"error": "Invalid product ID"}), 400
 
+    # Verify the product belongs to this user before returning data
+    query_verify = "SELECT 1 FROM usertrackeditems WHERE usersitemid = %s AND userprofileid = %s;"
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query_verify, (product_id, user_id))
+            if not cur.fetchone():
+                return jsonify({"error": "Product not found or unauthorized"}), 403
+
     points = get_price_graph_data(product_id)
 
     return jsonify({"data": points})
-
-
-if __name__ == '__main__':
-    app.run(debug=True, port=8000)

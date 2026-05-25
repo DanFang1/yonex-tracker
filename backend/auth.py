@@ -40,8 +40,8 @@ def register_user(username: str, password: str, email: str) -> int:
                 user_id = cur.fetchone()[0]
                 conn.commit()
         return user_id 
-    except IntegrityError as e:
-        raise ValueError(f"Error registering user: {e}")
+    except IntegrityError:
+        raise ValueError("Username or email already taken")
 
 
 def login_user(username: str, password: str) -> bool:
