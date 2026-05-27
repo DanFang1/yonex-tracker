@@ -17,6 +17,8 @@ if not _secret_key:
     raise RuntimeError("FLASK_KEY environment variable is not set")
 
 app.secret_key = _secret_key
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = True
 _frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
 CORS(app, resources={r"/*": {"origins": [_frontend_url]}}, supports_credentials=True)
  
