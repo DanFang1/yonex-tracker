@@ -44,7 +44,7 @@ export default function Dashboard() {
       setShowAddForm(false);
       fetchProducts();
     } catch (err) {
-      alert(err.response?.data || 'Failed to add product');
+      alert(err.response?.data?.error || 'Failed to add product');
     }
   };
 

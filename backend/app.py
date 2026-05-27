@@ -38,7 +38,7 @@ def is_valid_email(email):
     return re.match(pattern, email) is not None
 
 
-ALLOWED_DOMAINS = {'www.yonex.com', 'yonex.com'}
+ALLOWED_DOMAINS = {'www.yonex.com', 'yonex.com', 'us.yonex.com'}
 
 
 def is_valid_url(url):
