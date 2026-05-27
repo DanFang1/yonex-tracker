@@ -149,7 +149,7 @@ def add_product():
     if target_price >= current_price:
         return jsonify({"error": "Target price must be less than current price"}), 400
 
-    usersitemid = insert_user_products(user_id, product_url, target_price)
+    usersitemid = insert_user_products(user_id, product, target_price)
 
     with get_connection() as conn:
         with conn.cursor() as cur:

@@ -2,8 +2,6 @@ import psycopg2
 from psycopg2 import sql, IntegrityError
 from dotenv import load_dotenv  
 import os
-import scraper as scraper
-
 load_dotenv()
 
 
@@ -11,16 +9,14 @@ def get_connection():
     return psycopg2.connect(os.getenv('DATABASE_URL'))
 
 
-def insert_user_products(user_id, product_url , target_price):
+def insert_user_products(user_id, product, target_price):
     """""Inserts a new product into the products table based on product URL, then links to user.
     Uses INSERT...ON CONFLICT to safely handle multiple concurrent processes."""
-    
+
     with get_connection() as conn:
         with conn.cursor() as cur:
             try:
-                # Fetch product data
-                product = scraper.return_dict(product_url)
-                
+
                 # Insert product if URL and name are both new; otherwise reuse existing row.
                 insert_product_query = sql.SQL(
                     """
