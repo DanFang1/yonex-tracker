@@ -140,8 +140,10 @@ def add_product():
     if target_price <= 0:
         return jsonify({"error": "Target price must be greater than 0"}), 400
 
-    product = scraper.return_dict(product_url)
-    print(product)
+    try:
+        product = scraper.return_dict(product_url)
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
     current_price = product["product_price"]
 
     if target_price >= current_price:

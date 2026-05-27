@@ -34,6 +34,7 @@ def return_dict(url):
             return product
         except Exception as e:
             print("Error:", e)
+            raise ValueError(f"Failed to scrape product: {e}")
         finally:
             browser.close()
             
