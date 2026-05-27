@@ -27,7 +27,7 @@ def return_dict(url):
         
         try:
             browser.goto(url.strip())
-            browser.wait_for_timeout(5000)
+            browser.wait_for_selector(price_selector, timeout=15000)
             product = find_products(browser)
             product["product_url"] = url.strip()
             print(product)
