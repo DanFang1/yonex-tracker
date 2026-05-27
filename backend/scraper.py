@@ -23,12 +23,15 @@ def find_products(page):
 def return_dict(url):
     """ return product name, price and, url as a dictionary"""
     with sync_playwright() as p:
-        browser= p.chromium.launch(headless=True).new_page()
-        
+        browser = p.chromium.launch(
+            headless=True,
+            args=['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
+        )
+        page = browser.new_page()
         try:
-            browser.goto(url.strip())
-            browser.wait_for_selector(price_selector, timeout=15000)
-            product = find_products(browser)
+            page.goto(url.strip())
+            page.wait_for_selector(price_selector, timeout=15000)
+            product = find_products(page)
             product["product_url"] = url.strip()
             print(product)
             return product
