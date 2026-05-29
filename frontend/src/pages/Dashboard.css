@@ -97,10 +97,10 @@
 .product-list {
   flex: 1;
   overflow-y: auto;
-  padding: 10px 12px;
+  padding: 14px 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .product-list::-webkit-scrollbar {
@@ -120,7 +120,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
+  padding: 18px 16px;
   cursor: pointer;
   border-radius: 8px;
   background: #1c2128;
