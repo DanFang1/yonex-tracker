@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getDashboard, deleteProduct, addProduct, getPriceGraph} from '../api/products';
-import PriceGraph from '../components/PriceGraph';
+import { getDashboard, deleteProduct, addProduct } from '../api/products';
 import './Dashboard.css';
-
 
 export default function Dashboard() {
   const [products, setProducts] = useState([]);
@@ -12,9 +10,7 @@ export default function Dashboard() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [productUrl, setProductUrl] = useState('');
   const [targetPrice, setTargetPrice] = useState('');
-  const [showGraph, setShowGraph] = useState(false);
-  const [graphData, setGraphData] = useState(null);
-  const [graphProductName, setGraphProductName] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   const fetchProducts = useCallback(async () => {
@@ -59,98 +55,98 @@ export default function Dashboard() {
     }
   };
 
-  const handleViewGraph = async (productId, productName) => {
-    try {
-      const response = await getPriceGraph(productId);
-      setGraphData(response.data.data);
-      setGraphProductName(productName);
-      setShowGraph(true);
-    } catch (err) {
-      alert('Failed to view graph');
-    }
-  };
+  const filteredProducts = products.filter((product) =>
+    product[1].toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const handleCloseGraph = () => {
-    setShowGraph(false);
-    setGraphData(null);
-    setGraphProductName('');
-  };
-    
-  if (loading) return <div className="dashboard">Loading...</div>;
+  if (loading) return <div className="app-shell"><div className="loading">Loading...</div></div>;
 
   return (
-    <div className="dashboard"> 
-      <header className="dashboard-header">
-        <h1 id="title-font">Yonex Tracker</h1>    
-      </header>
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <div className="search-bar">
+            <span className="search-icon">&#128269;</span>
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
 
-      <div className="dashboard-content">
-      {error && <p className="error">{error}</p>}
+        <div className="product-list">
+          {error && <p className="sidebar-error">{error}</p>}
+
+          {filteredProducts.length === 0 && !error && (
+            <p className="sidebar-empty">
+              {products.length === 0 ? 'No products tracked yet.' : 'No results found.'}
+            </p>
+          )}
+
+          {filteredProducts.map((product) => (
+            <div key={product[0]} className="product-item">
+              <div className="product-item-info">
+                <span className="product-item-name">{product[1]}</span>
+                <span className="product-item-target">Target: ${product[3]}</span>
+              </div>
+              <div className="product-item-right">
+                <span className="product-item-price">${product[2]}</span>
+                <button
+                  className="product-item-delete"
+                  onClick={() => handleDeleteProduct(product[0])}
+                  title="Remove"
+                >
+                  &#10005;
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="sidebar-footer">
+          <span className="tracked-count">{products.length} product{products.length !== 1 ? 's' : ''} tracked</span>
+          <button className="logout-btn" onClick={() => navigate('/login')}>Logout</button>
+        </div>
+      </aside>
+
+      <main className="main-content">
+        {/* Right panel — coming soon */}
+      </main>
 
       {showAddForm && (
-        <form className="add-product-form" onSubmit={handleAddProduct}>
-          <input
-            type="url"
-            placeholder="Product URL"
-            value={productUrl}
-            onChange={(e) => setProductUrl(e.target.value)}
-            required
-          />
-          <input
-            type="number"
-            placeholder="Target Price"
-            step="0.01"
-            value={targetPrice}
-            onChange={(e) => setTargetPrice(e.target.value)}
-            required
-          />
-          <button type="submit">Add Product</button>
-        </form>
+        <div className="add-modal-overlay" onClick={() => setShowAddForm(false)}>
+          <form
+            className="add-modal"
+            onSubmit={handleAddProduct}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>Track a Product</h3>
+            <input
+              type="url"
+              placeholder="Product URL"
+              value={productUrl}
+              onChange={(e) => setProductUrl(e.target.value)}
+              required
+            />
+            <input
+              type="number"
+              placeholder="Target Price"
+              step="0.01"
+              value={targetPrice}
+              onChange={(e) => setTargetPrice(e.target.value)}
+              required
+            />
+            <div className="add-modal-actions">
+              <button type="button" onClick={() => setShowAddForm(false)}>Cancel</button>
+              <button type="submit">Add</button>
+            </div>
+          </form>
+        </div>
       )}
 
-      <div className="products-grid">
-        {products.map((product) => (
-          <div key={product[0]} className="product-card">
-            <h3>{product[1]}</h3>
-            <p>Current Price: <strong>${product[2]}</strong></p>
-            <p>Target Price: <strong>${product[3]}</strong></p>
-            <button 
-              className="delete-btn"
-              onClick={() => handleViewGraph(product[0], product[1])}
-            >
-              Graph
-            </button>
-            <button
-              className="delete-btn"
-              onClick={() => handleDeleteProduct(product[0])}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {products.length === 0 && (
-        <p className="empty-state">No products tracked yet. Add one to get started!</p>
-      )}
-      </div> 
-
-      <button 
-        className="add-btn"
-        onClick={() => setShowAddForm(!showAddForm)}
-      >
-        {showAddForm ? 'Cancel' : '+'}
-      </button>
-
-      <button id="logout-button" onClick={() => navigate('/login')}>Logout</button>
-
-      {showGraph && (
-        <PriceGraph 
-          data={graphData} 
-          productName={graphProductName}
-          onClose={handleCloseGraph}
-        />
-      )}
+      <button className="fab" onClick={() => setShowAddForm(true)} title="Track a product">+</button>
     </div>
   );
 }
