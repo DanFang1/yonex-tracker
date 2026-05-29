@@ -204,9 +204,12 @@ def dashboard():
     if not user_id:
         return jsonify({"error": "Not logged in"}), 401
     
-    # Query database for user's products
+    # Query database for user's products, including first recorded price for % change
     query = """
-    SELECT ut.usersitemid, p.product_name, p.current_price, ut.target_price
+    SELECT ut.usersitemid, p.product_name, p.current_price, ut.target_price,
+           (SELECT recorded_price FROM price_history
+            WHERE history_pid = p.product_id
+            ORDER BY time_change ASC LIMIT 1) AS initial_price
     FROM usertrackeditems ut
     JOIN products p ON ut.usersitemid = p.product_id
     WHERE ut.userprofileid = %s

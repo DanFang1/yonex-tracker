@@ -92,24 +92,41 @@ export default function Dashboard() {
             </p>
           )}
 
-          {filteredProducts.map((product) => (
-            <div key={product[0]} className="product-item">
-              <div className="product-item-info">
-                <span className="product-item-name">{product[1]}</span>
-                <span className="product-item-target">Target: ${product[3]}</span>
+          {filteredProducts.map((product) => {
+            const currentPrice = parseFloat(product[2]);
+            const initialPrice = product[4] ? parseFloat(product[4]) : null;
+            const pctChange = initialPrice && initialPrice !== 0
+              ? ((currentPrice - initialPrice) / initialPrice) * 100
+              : null;
+            const pctLabel = pctChange !== null
+              ? `${pctChange >= 0 ? '+' : ''}${pctChange.toFixed(1)}%`
+              : null;
+            const pctClass = pctChange === null ? '' : pctChange < 0 ? 'pct-down' : 'pct-up';
+
+            return (
+              <div key={product[0]} className="product-item">
+                <div className="product-item-info">
+                  <span className="product-item-name">{product[1]}</span>
+                  <span className="product-item-target">Target: ${product[3]}</span>
+                </div>
+                <div className="product-item-right">
+                  <div className="product-item-price-row">
+                    <span className="product-item-price">${parseFloat(product[2]).toFixed(2)}</span>
+                    <button
+                      className="product-item-delete"
+                      onClick={() => handleDeleteProduct(product[0])}
+                      title="Remove"
+                    >
+                      &#10005;
+                    </button>
+                  </div>
+                  {pctLabel && (
+                    <span className={`product-item-pct ${pctClass}`}>{pctLabel}</span>
+                  )}
+                </div>
               </div>
-              <div className="product-item-right">
-                <span className="product-item-price">${product[2]}</span>
-                <button
-                  className="product-item-delete"
-                  onClick={() => handleDeleteProduct(product[0])}
-                  title="Remove"
-                >
-                  &#10005;
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="sidebar-footer">
