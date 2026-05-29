@@ -74,7 +74,6 @@ export default function Dashboard() {
       <aside className="sidebar">
         <div className="sidebar-header">
           <div className="search-bar">
-            <span className="search-icon">&#128269;</span>
             <input
               type="text"
               placeholder="Search products..."

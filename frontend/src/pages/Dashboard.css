@@ -67,7 +67,7 @@
 }
 
 .sidebar-header {
-  padding: 16px;
+  padding: 20px 16px;
   border-bottom: 1px solid #21262d;
 }
 
@@ -77,8 +77,7 @@
   background: #0d1117;
   border: 1px solid #30363d;
   border-radius: 8px;
-  padding: 10px 14px;
-  gap: 10px;
+  padding: 12px 14px;
 }
 
 .search-bar input {
@@ -92,12 +91,6 @@
 
 .search-bar input::placeholder {
   color: #6e7681;
-}
-
-.search-icon {
-  color: #6e7681;
-  font-size: 14px;
-  flex-shrink: 0;
 }
 
 /* ── Product list ── */
