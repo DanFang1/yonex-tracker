@@ -110,19 +110,19 @@ export default function Dashboard() {
                   <span className="product-item-target">Target: ${product[3]}</span>
                 </div>
                 <div className="product-item-right">
-                  <div className="product-item-price-row">
+                  <div className="product-item-price-col">
                     <span className="product-item-price">${parseFloat(product[2]).toFixed(2)}</span>
-                    <button
-                      className="product-item-delete"
-                      onClick={() => handleDeleteProduct(product[0])}
-                      title="Remove"
-                    >
-                      &#10005;
-                    </button>
+                    {pctLabel && (
+                      <span className={`product-item-pct ${pctClass}`}>{pctLabel}</span>
+                    )}
                   </div>
-                  {pctLabel && (
-                    <span className={`product-item-pct ${pctClass}`}>{pctLabel}</span>
-                  )}
+                  <button
+                    className="product-item-delete"
+                    onClick={() => handleDeleteProduct(product[0])}
+                    title="Remove"
+                  >
+                    &#10005;
+                  </button>
                 </div>
               </div>
             );
