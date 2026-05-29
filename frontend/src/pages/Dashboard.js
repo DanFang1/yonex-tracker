@@ -63,6 +63,14 @@ export default function Dashboard() {
 
   return (
     <div className="app-shell">
+      <header className="topbar">
+        <div className="topbar-brand">
+          <span className="topbar-logo">&#9775;</span>
+          <span className="topbar-name"><strong>YONEX</strong> Price Tracker</span>
+        </div>
+      </header>
+
+      <div className="app-body">
       <aside className="sidebar">
         <div className="sidebar-header">
           <div className="search-bar">
@@ -114,6 +122,7 @@ export default function Dashboard() {
       <main className="main-content">
         {/* Right panel — coming soon */}
       </main>
+      </div>
 
       {showAddForm && (
         <div className="add-modal-overlay" onClick={() => setShowAddForm(false)}>

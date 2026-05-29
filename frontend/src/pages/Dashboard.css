@@ -6,10 +6,53 @@
 
 .app-shell {
   display: flex;
+  flex-direction: column;
   height: 100vh;
   background: #0d1117;
   color: #e6edf3;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── Top bar ── */
+.topbar {
+  height: 56px;
+  min-height: 56px;
+  background: #161b22;
+  border-bottom: 1px solid #21262d;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 10;
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-logo {
+  font-size: 22px;
+  line-height: 1;
+  color: #58a6ff;
+}
+
+.topbar-name {
+  font-size: 16px;
+  color: #e6edf3;
+  letter-spacing: 0.02em;
+}
+
+.topbar-name strong {
+  color: #58a6ff;
+  font-weight: 700;
+}
+
+/* ── Body below topbar ── */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
 }
 
 /* ── Sidebar ── */
@@ -20,7 +63,7 @@
   border-right: 1px solid #21262d;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
 }
 
 .sidebar-header {
