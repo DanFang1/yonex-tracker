@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #0b1320;
+  background: #080f1a;
   color: #e6edf3;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
@@ -17,7 +17,7 @@
 .topbar {
   height: 56px;
   min-height: 56px;
-  background: #0b1320;
+  background: #080f1a;
   border-bottom: 1px solid #1c2a3a;
   display: flex;
   align-items: center;
@@ -59,7 +59,7 @@
 .sidebar {
   width: 320px;
   min-width: 320px;
-  background: #0b1320;
+  background: #080f1a;
   border-right: 1px solid #1c2a3a;
   display: flex;
   flex-direction: column;
@@ -74,7 +74,7 @@
 .search-bar {
   display: flex;
   align-items: center;
-  background: #08101a;
+  background: #050d16;
   border: 1px solid #1c2a3a;
   border-radius: 8px;
   padding: 12px 14px;
@@ -123,7 +123,7 @@
   padding: 18px 16px;
   cursor: pointer;
   border-radius: 8px;
-  background: #101c2a;
+  background: #0d1826;
   border: 1px solid #1c2a3a;
   transition: background 0.15s, border-color 0.15s;
   gap: 12px;
@@ -264,7 +264,7 @@
 .main-content {
   flex: 1;
   overflow-y: auto;
-  background: #0b1320;
+  background: #080f1a;
 }
 
 .detail-empty {
@@ -310,7 +310,7 @@
   align-items: center;
   gap: 6px;
   background: #3ddc84;
-  color: #08101a;
+  color: #050d16;
   text-decoration: none;
   padding: 10px 22px;
   border-radius: 8px;
@@ -344,7 +344,7 @@
 }
 
 .stat-card {
-  background: #101c2a;
+  background: #0d1826;
   border: 1px solid #1c2a3a;
   border-radius: 10px;
   padding: 20px 24px;
@@ -372,7 +372,7 @@
 
 /* ── Chart section ── */
 .chart-section {
-  background: #101c2a;
+  background: #0d1826;
   border: 1px solid #1c2a3a;
   border-radius: 10px;
   padding: 20px 24px;
@@ -437,7 +437,7 @@
   height: 52px;
   border-radius: 50%;
   background: #3ddc84;
-  color: #08101a;
+  color: #050d16;
   border: none;
   font-size: 28px;
   line-height: 1;
@@ -466,7 +466,7 @@
 }
 
 .add-modal {
-  background: #101c2a;
+  background: #0d1826;
   border: 1px solid #1c2a3a;
   border-radius: 12px;
   padding: 24px;
@@ -483,7 +483,7 @@
 }
 
 .add-modal input {
-  background: #08101a;
+  background: #050d16;
   border: 1px solid #1c2a3a;
   border-radius: 8px;
   padding: 10px 14px;
@@ -530,7 +530,7 @@
 
 .add-modal-actions button[type="submit"] {
   background: #3ddc84;
-  color: #08101a;
+  color: #050d16;
   border-color: #3ddc84;
   font-weight: 700;
 }
