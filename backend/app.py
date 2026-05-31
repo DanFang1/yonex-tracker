@@ -209,7 +209,8 @@ def dashboard():
     SELECT ut.usersitemid, p.product_name, p.current_price, ut.target_price,
            (SELECT recorded_price FROM price_history
             WHERE history_pid = p.product_id
-            ORDER BY time_change ASC LIMIT 1) AS initial_price
+            ORDER BY time_change ASC LIMIT 1) AS initial_price,
+           p.product_url
     FROM usertrackeditems ut
     JOIN products p ON ut.usersitemid = p.product_id
     WHERE ut.userprofileid = %s

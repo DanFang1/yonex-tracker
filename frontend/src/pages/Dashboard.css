@@ -250,11 +250,182 @@
   color: #e6edf3;
 }
 
+/* ── Active sidebar item ── */
+.product-item--active {
+  background: #1f2d3d;
+  border-color: #388bfd;
+}
+
+.product-item--active:hover {
+  background: #1f2d3d;
+}
+
 /* ── Main content area ── */
 .main-content {
   flex: 1;
   overflow-y: auto;
   background: #0d1117;
+}
+
+.detail-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6e7681;
+  font-size: 14px;
+}
+
+/* ── Detail panel ── */
+.detail-panel {
+  padding: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.detail-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #e6edf3;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.detail-buy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #238636;
+  color: white;
+  text-decoration: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  width: fit-content;
+  transition: background 0.2s;
+}
+
+.detail-buy-btn:hover {
+  background: #2ea043;
+}
+
+.detail-header-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.detail-current-price {
+  font-size: 42px;
+  font-weight: 700;
+  color: #e6edf3;
+  line-height: 1;
+}
+
+/* ── Stat cards ── */
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 10px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6e7681;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.stat-blue  { color: #58a6ff; }
+.stat-green { color: #3fb950; }
+.stat-red   { color: #f0883e; }
+
+/* ── Chart section ── */
+.chart-section {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 10px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chart-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6e7681;
+  letter-spacing: 0.06em;
+}
+
+.time-range-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.time-btn {
+  background: none;
+  border: 1px solid #30363d;
+  color: #8b949e;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.time-btn:hover {
+  background: #21262d;
+  color: #e6edf3;
+}
+
+.time-btn--active {
+  background: #388bfd22;
+  border-color: #388bfd;
+  color: #58a6ff;
+}
+
+.chart-loading {
+  color: #6e7681;
+  font-size: 13px;
+  padding: 40px 0;
+  text-align: center;
 }
 
 /* ── FAB (add product button) ── */
