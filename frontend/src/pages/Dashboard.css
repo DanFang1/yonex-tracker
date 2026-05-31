@@ -17,8 +17,8 @@
 .topbar {
   height: 56px;
   min-height: 56px;
-  background: #161b22;
-  border-bottom: 1px solid #21262d;
+  background: #0e1726;
+  border-bottom: 1px solid #1c2a3a;
   display: flex;
   align-items: center;
   padding: 0 24px;
@@ -309,19 +309,19 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #238636;
-  color: white;
+  background: #3dd68c;
+  color: #0d1117;
   text-decoration: none;
   padding: 10px 22px;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   width: fit-content;
   transition: background 0.2s;
 }
 
 .detail-buy-btn:hover {
-  background: #2ea043;
+  background: #56e39f;
 }
 
 .detail-header-right {

@@ -188,7 +188,7 @@ export default function Dashboard() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    &#128722; Buy Now
+                    Buy Now
                   </a>
                 </div>
                 <div className="detail-header-right">
