@@ -93,13 +93,27 @@ export default function Dashboard() {
   const lowestEver = prices.length ? Math.min(...prices) : null;
   const highestEver = prices.length ? Math.max(...prices) : null;
 
+  const selectedInitial = selected && selected[4] ? parseFloat(selected[4]) : null;
+  const selectedCurrent = selected ? parseFloat(selected[2]) : null;
+
+  const calcPct = (value, base) =>
+    value !== null && base && base !== 0
+      ? ((value - base) / base) * 100
+      : null;
+
+  const fmtPct = (pct) =>
+    pct !== null ? `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%` : null;
+
+  const currentPct  = calcPct(selectedCurrent, selectedInitial);
+  const lowestPct   = calcPct(lowestEver, selectedInitial);
+
   if (loading) return <div className="app-shell"><div className="loading">Loading...</div></div>;
 
   return (
     <div className="app-shell">
       <header className="topbar">
         <div className="topbar-brand">
-          <span className="topbar-name"><strong>YONEX  </strong> Tracker</span>
+          <span className="topbar-name"><strong>YONEX</strong> Tracker</span>
         </div>
       </header>
 
@@ -192,6 +206,11 @@ export default function Dashboard() {
                 </div>
                 <div className="detail-header-right">
                   <span className="detail-current-price">${parseFloat(selected[2]).toFixed(2)}</span>
+                  {fmtPct(currentPct) && (
+                    <span className={`detail-header-pct ${currentPct < 0 ? 'pct-down' : 'pct-up'}`}>
+                      {fmtPct(currentPct)}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -199,12 +218,22 @@ export default function Dashboard() {
                 <div className="stat-card">
                   <span className="stat-label">CURRENT PRICE</span>
                   <span className="stat-value stat-blue">${parseFloat(selected[2]).toFixed(2)}</span>
+                  {fmtPct(currentPct) && (
+                    <span className={`stat-pct ${currentPct < 0 ? 'pct-down' : 'pct-up'}`}>
+                      {fmtPct(currentPct)}
+                    </span>
+                  )}
                 </div>
                 <div className="stat-card">
                   <span className="stat-label">LOWEST EVER</span>
                   <span className="stat-value stat-green">
                     {lowestEver !== null ? `$${lowestEver.toFixed(2)}` : '—'}
                   </span>
+                  {fmtPct(lowestPct) && (
+                    <span className={`stat-pct ${lowestPct < 0 ? 'pct-down' : 'pct-up'}`}>
+                      {fmtPct(lowestPct)}
+                    </span>
+                  )}
                 </div>
                 <div className="stat-card">
                   <span className="stat-label">HIGHEST EVER</span>

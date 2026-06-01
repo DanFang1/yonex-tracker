@@ -325,8 +325,11 @@
 }
 
 .detail-header-right {
-  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   flex-shrink: 0;
+  gap: 6px;
 }
 
 .detail-current-price {
@@ -334,6 +337,11 @@
   font-weight: 700;
   color: #e6edf3;
   line-height: 1;
+}
+
+.detail-header-pct {
+  font-size: 15px;
+  font-weight: 600;
 }
 
 /* ── Stat cards ── */
@@ -369,6 +377,11 @@
 .stat-blue  { color: #58a6ff; }
 .stat-green { color: #3fb950; }
 .stat-red   { color: #f0883e; }
+
+.stat-pct {
+  font-size: 13px;
+  font-weight: 600;
+}
 
 /* ── Chart section ── */
 .chart-section {
