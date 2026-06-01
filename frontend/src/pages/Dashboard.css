@@ -378,6 +378,13 @@
 .stat-green { color: #3fb950; }
 .stat-red   { color: #f0883e; }
 
+.stat-value-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .stat-pct {
   font-size: 13px;
   font-weight: 600;

@@ -106,6 +106,7 @@ export default function Dashboard() {
 
   const currentPct  = calcPct(selectedCurrent, selectedInitial);
   const lowestPct   = calcPct(lowestEver, selectedInitial);
+  const highestPct  = calcPct(highestEver, selectedInitial);
 
   if (loading) return <div className="app-shell"><div className="loading">Loading...</div></div>;
 
@@ -208,7 +209,7 @@ export default function Dashboard() {
                   <span className="detail-current-price">${parseFloat(selected[2]).toFixed(2)}</span>
                   {fmtPct(currentPct) && (
                     <span className={`detail-header-pct ${currentPct < 0 ? 'pct-down' : 'pct-up'}`}>
-                      {fmtPct(currentPct)}
+                      {fmtPct(currentPct)} {currentPct < 0 ? '↓' : '↑'}
                     </span>
                   )}
                 </div>
@@ -226,20 +227,29 @@ export default function Dashboard() {
                 </div>
                 <div className="stat-card">
                   <span className="stat-label">LOWEST EVER</span>
-                  <span className="stat-value stat-green">
-                    {lowestEver !== null ? `$${lowestEver.toFixed(2)}` : '—'}
-                  </span>
-                  {fmtPct(lowestPct) && (
-                    <span className={`stat-pct ${lowestPct < 0 ? 'pct-down' : 'pct-up'}`}>
-                      {fmtPct(lowestPct)}
+                  <div className="stat-value-row">
+                    <span className="stat-value stat-green">
+                      {lowestEver !== null ? `$${lowestEver.toFixed(2)}` : '—'}
                     </span>
-                  )}
+                    {fmtPct(lowestPct) && (
+                      <span className={`stat-pct ${lowestPct < 0 ? 'pct-down' : 'pct-up'}`}>
+                        {fmtPct(lowestPct)}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="stat-card">
                   <span className="stat-label">HIGHEST EVER</span>
-                  <span className="stat-value stat-red">
-                    {highestEver !== null ? `$${highestEver.toFixed(2)}` : '—'}
-                  </span>
+                  <div className="stat-value-row">
+                    <span className="stat-value stat-red">
+                      {highestEver !== null ? `$${highestEver.toFixed(2)}` : '—'}
+                    </span>
+                    {fmtPct(highestPct) && (
+                      <span className={`stat-pct ${highestPct < 0 ? 'pct-down' : 'pct-up'}`}>
+                        {fmtPct(highestPct)}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
 
