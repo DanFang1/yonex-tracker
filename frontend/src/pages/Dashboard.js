@@ -106,7 +106,6 @@ export default function Dashboard() {
 
   const currentPct  = calcPct(selectedCurrent, selectedInitial);
   const lowestPct   = calcPct(lowestEver, selectedInitial);
-  const highestPct  = calcPct(highestEver, selectedInitial);
 
   if (loading) return <div className="app-shell"><div className="loading">Loading...</div></div>;
 
