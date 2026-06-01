@@ -218,12 +218,14 @@ export default function Dashboard() {
               <div className="stat-cards">
                 <div className="stat-card">
                   <span className="stat-label">CURRENT PRICE</span>
-                  <span className="stat-value stat-blue">${parseFloat(selected[2]).toFixed(2)}</span>
-                  {fmtPct(currentPct) && (
-                    <span className={`stat-pct ${currentPct < 0 ? 'pct-down' : 'pct-up'}`}>
-                      {fmtPct(currentPct)}
-                    </span>
-                  )}
+                  <div className="stat-value-row">
+                    <span className="stat-value stat-blue">${parseFloat(selected[2]).toFixed(2)}</span>
+                    {fmtPct(currentPct) && (
+                      <span className={`stat-pct ${currentPct < 0 ? 'pct-down' : 'pct-up'}`}>
+                        {fmtPct(currentPct)}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="stat-card">
                   <span className="stat-label">LOWEST EVER</span>
@@ -240,16 +242,9 @@ export default function Dashboard() {
                 </div>
                 <div className="stat-card">
                   <span className="stat-label">HIGHEST EVER</span>
-                  <div className="stat-value-row">
-                    <span className="stat-value stat-red">
-                      {highestEver !== null ? `$${highestEver.toFixed(2)}` : '—'}
-                    </span>
-                    {fmtPct(highestPct) && (
-                      <span className={`stat-pct ${highestPct < 0 ? 'pct-down' : 'pct-up'}`}>
-                        {fmtPct(highestPct)}
-                      </span>
-                    )}
-                  </div>
+                  <span className="stat-value stat-red">
+                    {highestEver !== null ? `$${highestEver.toFixed(2)}` : '—'}
+                  </span>
                 </div>
               </div>
 
