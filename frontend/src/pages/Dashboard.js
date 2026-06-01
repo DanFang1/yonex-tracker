@@ -99,7 +99,7 @@ export default function Dashboard() {
     <div className="app-shell">
       <header className="topbar">
         <div className="topbar-brand">
-          <span className="topbar-name"><strong>YONEX</strong>   Tracker</span>
+          <span className="topbar-name"><strong>YONEX  </strong> Tracker</span>
         </div>
       </header>
 
