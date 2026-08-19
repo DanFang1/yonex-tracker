@@ -37,13 +37,3 @@ Create a `.env` file in the project root (gitignored) with:
 | `REACT_APP_API_URL` | Backend API URL consumed by the frontend |
 | `FRONTEND_URL` | Frontend origin allowed by CORS |
 | `REDIS_URL` | Redis instance used for API rate limiting |
-
-## Tests
-
-```bash
-# Backend
-cd backend && pytest test_routes.py -v
-
-# Frontend
-cd frontend && npm test
-```
