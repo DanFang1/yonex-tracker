@@ -25,26 +25,7 @@ Track prices on [yonex.com](https://www.yonex.com) and get emailed the moment an
   - `ci-cd.yml` — runs backend (`pytest`) and frontend tests/build on every push/PR to `main`. Vercel and Render auto-deploy from `main` once checks pass.
   - `price-tracker-jobs.yml`, `check-targets.yml`, `reset-notified.yml` — scheduled backend jobs (currently trigger via `workflow_dispatch`; cron schedules are commented out).
 
-## Local setup
-
-### Backend
-
-```bash
-cd backend
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt -r requirements-dev.txt
-python app.py
-```
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-### Environment variables
+## Environment variables
 
 Create a `.env` file in the project root (gitignored) with:
 
