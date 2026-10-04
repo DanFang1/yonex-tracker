@@ -32,11 +32,6 @@ jobs:
         run: |
           pip install -r backend/requirements.txt
       
-      - name: Install Playwright browsers and dependencies
-        run: |
-          playwright install
-          playwright install-deps
-      
       - name: Run price refresher
         run: |
           cd backend && python price_updater.py price_refresher

@@ -38,11 +38,6 @@ jobs:
         run: |
           pip install -r backend/requirements.txt
       
-      - name: Install Playwright browsers and dependencies
-        run: |
-          playwright install
-          playwright install-deps
-      
       - name: Check targets and notify
         run: |
           cd backend && python price_updater.py check_and_notify_targets
