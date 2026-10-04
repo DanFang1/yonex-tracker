@@ -9,6 +9,7 @@ on:
   workflow_dispatch:
 
 env:
+  DATABASE_URL: ${{ secrets.DB_URL }}
   DB_NAME: ${{ secrets.DB_NAME }}
   DB_USER: ${{ secrets.DB_USER }}
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
