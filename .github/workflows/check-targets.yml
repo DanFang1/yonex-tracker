@@ -2,9 +2,9 @@ name: Check and Notify Targets
 
 on:
   
-  #schedule:
+  schedule:
     # Run every 30 minutes
-    #- cron: '5,35 * * * *'
+    - cron: '5,35 * * * *'
   
   workflow_dispatch:
 
