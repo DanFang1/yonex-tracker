@@ -15,7 +15,7 @@ SENDER_PASSWORD = os.getenv('SENDER_PASSWORD')
 
 
 def send_price_alert(user_email, product_name, target_price, current_price):
-    """Send email notification when price drops to target"""
+    """Send email notification when price drops to target. Returns True if sent, False on failure."""
     
     subject = f"Alert: {product_name} dropped to ${current_price}!"
     
@@ -40,5 +40,7 @@ def send_price_alert(user_email, product_name, target_price, current_price):
             server.send_message(msg)
         
         print(f"Email sent to {user_email}")
+        return True
     except Exception as e:
         print(f"Error sending email: {e}")
+        return False

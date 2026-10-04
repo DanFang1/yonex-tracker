@@ -36,24 +36,26 @@ def check_and_notify_targets():
     """Check for products that hit target prices and notify users."""
     try:
         query = """
-        SELECT u.email, p.product_url, p.current_price, ut.target_price, p.product_name, ut.userprofileid
+        SELECT u.email, p.product_url, p.current_price, ut.target_price, p.product_name, ut.userprofileid, ut.usersitemid
         FROM usertrackeditems ut
         JOIN products p ON ut.usersitemid = p.product_id
         JOIN accounts u ON ut.userprofileid = u.user_id
         WHERE p.current_price <= ut.target_price AND ut.notified = FALSE;
         """
         
-        update_query = "UPDATE usertrackeditems SET notified = TRUE WHERE userprofileid = %s;"
+        update_query = "UPDATE usertrackeditems SET notified = TRUE WHERE userprofileid = %s AND usersitemid = %s;"
         
         with get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(query)
                 results = cur.fetchall()
                 
-                for email, product_url, current_price, target_price, product_name, userprofileid in results:
-                    send_price_alert(email, product_name, target_price, current_price)
+                for email, product_url, current_price, target_price, product_name, userprofileid, usersitemid in results:
+                    if not send_price_alert(email, product_name, target_price, current_price):
+                        # Leave notified = FALSE so the next run retries this alert.
+                        continue
                     
-                    cur.execute(update_query, (userprofileid,))
+                    cur.execute(update_query, (userprofileid, usersitemid))
                     conn.commit()
                     print(f"Notification sent to {email} for {product_name}")
     except Exception as e:
